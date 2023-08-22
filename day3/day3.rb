@@ -11,10 +11,10 @@ class Solver
 
     @file.each_line do |line|
       first_half = line[0, (line.size/2)]
-      second_half = line[(line.size/2+1)..-1]
+      second_half = line[(line.size/2)..-1]
 
       first_half.split('').each do |char|
-        for x in 1..second_half.size
+        for x in 0..second_half.size
           if char == second_half[x]
             lettersTemp << char
             next
@@ -36,11 +36,11 @@ class Solver
 
   def capital?(char)
     if char == nil
-      return 0
-    elsif char == char.upcase
-      priority_upper_case(char)
+      return nil
     elsif char == char.downcase
       priority_lower_case(char)
+    elsif char == char.upcase
+      priority_upper_case(char)
     else
       puts "error"
     end
