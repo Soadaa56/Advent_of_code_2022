@@ -29,9 +29,8 @@ class Solver
       if first_elf_ranges.size <= second_elf_ranges.size
         if (first_elf_ranges - second_elf_ranges).empty?
           @redundant_assignment_pairs += 1
-          break
         end
-      else
+      elsif first_elf_ranges.size > second_elf_ranges.size
         if (second_elf_ranges - first_elf_ranges).empty?
           @redundant_assignment_pairs += 1
         end
@@ -43,5 +42,5 @@ class Solver
 
 end
 
-a = Solver.new("test.md")
+a = Solver.new("input.md")
 a.clean_ranges
