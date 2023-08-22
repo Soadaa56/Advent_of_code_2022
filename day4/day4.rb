@@ -40,7 +40,30 @@ class Solver
     puts @redundant_assignment_pairs
   end
 
+  def any_clean_overlap
+    @file.each_line do |line|
+      first_elf_pair = line.split(',')[0]
+      second_elf_pair = line.split(',')[1].chomp
+
+      first_elf_start = first_elf_pair.split('-')[0].to_i
+      first_elf_end = first_elf_pair.split('-')[1].to_i
+      first_elf_ranges = Array (first_elf_start..first_elf_end)
+
+      second_elf_start = second_elf_pair.split('-')[0].to_i
+      second_elf_end = second_elf_pair.split('-')[1].to_i
+      second_elf_ranges = Array (second_elf_start..second_elf_end)
+
+      if first_elf_ranges.any? { |n| second_elf_ranges.include?(n) }
+         @redundant_assignment_pairs += 1 
+      end
+
+    end
+
+    puts @redundant_assignment_pairs
+
+  end
+
 end
 
 a = Solver.new("input.md")
-a.clean_ranges
+a.any_clean_overlap
