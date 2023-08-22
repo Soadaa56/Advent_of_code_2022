@@ -1,3 +1,5 @@
+require 'byebug'
+
 class Solver
   def initialize filename
     return unless File.exist?(filename)
@@ -33,18 +35,59 @@ class Solver
   end
 
   def triplets
-    lettersTemp = []
-    tempGroup = []
+    @firstRucksack = []
+    @secondRucksack = []
+    @thirdRucksack = []
 
-    @file.each_line.with_index(1) do |line, index|
-      tempGroup << line.chomp.split('')
-      puts "Index #{index}"
-      print tempGroup
-      puts "\n"
+    @file.each_line do |line|
+      if @firstRucksack.empty?
+        line.chomp.each_char { |char| @firstRucksack << char }
+      elsif @secondRucksack.empty?
+        line.chomp.each_char { |char| @secondRucksack << char }
+      elsif @thirdRucksack.empty?
+        line.chomp.each_char { |char| @thirdRucksack << char }
+        compare_items(@firstRucksack, @secondRucksack, @thirdRucksack)
+        clear_rucksacks
+      else
+        puts "Triplet each_line error"
+      end
+    end
+    
+    for x in 0..@letters.size
+      capital?(@letters[x])
     end
 
-    tempGroup
+    puts @total
+   end
+
+  def compare_items(array1, array2, array3)
+    tempLetter = []
+
+    array1.each do |char|
+      break unless tempLetter.empty?
+      for x in 0..array2.size
+        if char == array2[x]
+          for y in 0..array3.size
+            if char == array3[y]
+              tempLetter << char
+              break
+            end
+          end
+        end
+      end
+    end
+
+    @letters << tempLetter[0]
+
   end
+
+  def clear_rucksacks()
+    @firstRucksack = []
+    @secondRucksack = []
+    @thirdRucksack = []
+    return
+  end
+
 
   def capital?(char)
     if char == nil
@@ -70,5 +113,5 @@ class Solver
 
 end
 
-a = Solver.new("sample.md")
+a = Solver.new("input.md")
 a.triplets
